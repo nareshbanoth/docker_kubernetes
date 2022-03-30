@@ -2,6 +2,7 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
 from docker_Q1 import db_connection
+from fetch import fetch_info
 
 # instantiating the dag
 with DAG(
@@ -21,6 +22,7 @@ with DAG(
 ) as dag:
     # dag tasks
     t1 = PythonOperator(task_id='datetime_insert', python_callable=db_connection)
-
+    t2 = PythonOperator(task_id='fetching_info_from_PostgresDB', python_callable=fetch_info, dag=dag)
 # order of tasks
-t1
+
+t1 >> t2
